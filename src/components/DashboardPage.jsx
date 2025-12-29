@@ -3,7 +3,7 @@ import {
   PieChart, Building, CalendarClock, TrendingUp, 
   SendHorizontal, CheckCircle, Calendar, LayoutDashboard, FileText, User
 } from 'lucide-react';
-import { formatToBRL } from '../utils/helpers';
+import { formatToBRL, getHexFromTailwind } from '../utils/helpers';
 
 const DashboardPage = ({ 
   expenses, 
@@ -22,7 +22,7 @@ const DashboardPage = ({
 
   // --- ESTILO DARK PREMIUM ---
   const companyColor = currentCompany?.color || 'text-indigo-600';
-  const borderColorClass = companyColor.replace('text-', 'border-');
+  const borderColorClass = companyColor.includes('text-') ? companyColor.replace('text-', 'border-') : 'border-indigo-600';
 
   const months = [
       { v: '0', l: 'Janeiro' }, { v: '1', l: 'Fevereiro' }, { v: '2', l: 'Março' }, 
@@ -207,7 +207,10 @@ const DashboardPage = ({
     <div className="flex flex-col h-full overflow-hidden bg-slate-50">
       
       {/* HEADER DARK PREMIUM */}
-      <div className={`min-h-20 px-8 py-4 flex flex-col lg:flex-row justify-between lg:items-center gap-4 shrink-0 bg-slate-900 border-b-2 ${borderColorClass} shadow-md z-20`}>
+      <div 
+        className="min-h-20 px-8 py-4 flex flex-col lg:flex-row justify-between lg:items-center gap-4 shrink-0 bg-slate-900 border-b-2 shadow-md z-20"
+        style={{ borderBottomColor: getHexFromTailwind(companyColor) }}
+      >
         <div>
             <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-3">
                 <LayoutDashboard size={24} className={companyColor} />

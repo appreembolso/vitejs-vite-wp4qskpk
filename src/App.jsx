@@ -343,10 +343,10 @@ export default function App() {
   const handleViewReportByObj = useCallback((reportObj) => { if(reportObj) setViewReport(reportObj); }, []);
   
   const handleViewReportById = useCallback((repId) => {
-      const found = expenses.find(e => e.reportId === repId);
+      const found = expenses.find(e => e.reportId === repId && e.companyId === currentCompany?.id);
       if(found) { setViewReport({ reportId: found.reportId, ownerId: found.userId, costCenter: found.costCenter, closingDate: found.closingDate }); } 
       else { alert("Relatório não encontrado ou pertence a outra empresa."); }
-  }, [expenses]);
+  }, [expenses, currentCompany]);
 
   if (authLoading) return <div className="h-screen flex items-center justify-center bg-slate-900"><Loader className="animate-spin text-white"/></div>;
   if (!currentUser) return <LoginScreen onLogin={handleLogin} loading={false} />;
@@ -406,7 +406,7 @@ export default function App() {
       {/* ... MODAIS ... */}
       {showForm && <ExpenseModal onSubmit={handleSave} expenseToEdit={expenseToEdit} onClose={() => setShowForm(false)} costCentersList={filteredCostCenters} categoriesList={categories} isSubstituteMode={isSubstituteForm} currentCompany={currentCompany} onDeleteReceipt={handleDeleteReceipt} />}
       {confirmModal && <ConfirmModal isOpen={true} title="Fechar Relatório" msg={`Deseja fechar o relatório com ${selectedExpenses.length} itens?`} onClose={() => setConfirmModal(null)} onConfirm={handleCloseReport} isProcessing={isProcessing} />}
-      {viewReport && <ReportPrintModal report={viewReport} items={expenses.filter(e => e.reportId === viewReport.reportId)} onClose={() => setViewReport(null)} company={currentCompany} appUsers={appUsers} currentUser={currentUser} />}
+      {viewReport && <ReportPrintModal report={viewReport} items={expenses.filter(e => e.reportId === (viewReport.reportId || viewReport.id) && e.userId === viewReport.ownerId)} onClose={() => setViewReport(null)} company={currentCompany} appUsers={appUsers} currentUser={currentUser} />}
       {managementModalOpen && <ManagementModal isOpen={managementModalOpen} onClose={() => setManagementModalOpen(false)} onSave={handleSaveManagement} type={managementType} itemToEdit={managementItem} allCompanies={companies} />}
       {auditModal && <AuditReportModal isOpen={!!auditModal} onClose={() => setAuditModal(null)} reportId={auditModal.reportId} ownerId={auditModal.ownerId} items={expenses.filter(e => e.reportId === auditModal.reportId && e.userId === auditModal.ownerId)} onSave={handleSaveAudit} />}
       <EditReportIdModal isOpen={!!editReportModal} currentId={editReportModal} onClose={() => setEditReportModal(null)} onSave={handleUpdateReportId} />

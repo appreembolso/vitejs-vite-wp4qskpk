@@ -13,4 +13,9 @@ export default {
     },
   },
   plugins: [],
+  safelist: [
+    {
+      pattern: /(text|bg|border)-(blue|emerald|green|lime|purple|orange|amber|red|slate|indigo|black)-(600|700|800|900|500)/,
+    },
+  ],
 }

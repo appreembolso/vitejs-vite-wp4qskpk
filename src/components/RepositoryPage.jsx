@@ -3,7 +3,7 @@ import {
   Search, Calendar, Download, FileText, 
   Trash2, Paperclip, Filter, Database, Eye, Pencil, FilePenLine
 } from 'lucide-react';
-import { formatToBRL } from '../utils/helpers';
+import { formatToBRL, getHexFromTailwind } from '../utils/helpers';
 
 const YEARS = [2025, 2026, 2027, 2028, 2029, 2030];
 const MONTHS = [
@@ -32,7 +32,7 @@ const RepositoryPage = ({
 
   // --- ESTILO DARK PREMIUM ---
   const companyColor = currentCompany?.color || 'text-indigo-600';
-  const borderColorClass = companyColor.replace('text-', 'border-');
+  const borderColorClass = companyColor.includes('text-') ? companyColor.replace('text-', 'border-') : 'border-indigo-600';
 
   // Lógica de Filtragem (MANTIDA)
   const filteredData = useMemo(() => {
@@ -114,7 +114,10 @@ const RepositoryPage = ({
     <div className="flex flex-col h-full overflow-hidden bg-slate-50">
       
       {/* HEADER DARK PREMIUM */}
-      <div className={`min-h-20 px-8 py-4 flex flex-col lg:flex-row justify-between lg:items-center gap-4 shrink-0 bg-slate-900 border-b-2 ${borderColorClass} shadow-md z-20`}>
+      <div 
+        className="min-h-20 px-8 py-4 flex flex-col lg:flex-row justify-between lg:items-center gap-4 shrink-0 bg-slate-900 border-b-2 shadow-md z-20"
+        style={{ borderBottomColor: getHexFromTailwind(companyColor) }}
+      >
         
         {/* TÍTULO E TOTAL */}
         <div className="flex flex-col">

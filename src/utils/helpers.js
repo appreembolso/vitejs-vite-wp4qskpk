@@ -25,6 +25,24 @@ export const safePromise = (promise, timeoutMs = 25000) => {
   ]);
 };
 
+export const getHexFromTailwind = (twClass) => {
+  const colors = {
+    'text-blue-600': '#2563eb',
+    'text-emerald-600': '#059669',
+    'text-green-800': '#166534',
+    'text-lime-700': '#4d7c0f',
+    'text-purple-600': '#9333ea',
+    'text-orange-600': '#ea580c',
+    'text-amber-600': '#d97706',
+    'text-red-600': '#dc2626',
+    'text-slate-600': '#475569',
+    'text-slate-700': '#334155',
+    'text-indigo-600': '#4f46e5',
+    'text-black': '#000000'
+  };
+  return colors[twClass] || '#4f46e5';
+};
+
 export const generateSequentialId = async (db, userId) => {
   const year = new Date().getFullYear().toString();
   if (!db || !userId) return `OFF-${Date.now().toString().slice(-4)}`;

@@ -114,7 +114,7 @@ const ReportToPrint = React.forwardRef(({ report, items, company, appUsers, prel
         <div className="text-right">
           <div className="bg-white border border-red-100 rounded-lg px-3 py-1.5 shadow-sm mb-1 inline-block">
             <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400 block">ID Relatório</span>
-            <span className="text-lg font-black font-mono text-red-600">{report.reportId}</span>
+            <span className="text-lg font-black font-mono text-red-600">{report.reportId || report.id}</span>
           </div>
           <p className="text-[10px] text-slate-500 font-medium">Enviado em: <b>{reportDate}</b></p>
         </div>

@@ -102,7 +102,7 @@ const ReportPrintModal = ({ report, items, onClose, company, appUsers = [], curr
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
-    documentTitle: `Relatorio_${report.reportId}`,
+    documentTitle: `Relatorio_${report.reportId || report.id}`,
     onBeforeGetContent: () => {
         if (loadingImages) return Promise.reject("Aguarde imagens...");
         setIsPrinting(true);
@@ -121,7 +121,7 @@ const ReportPrintModal = ({ report, items, onClose, company, appUsers = [], curr
             <Printer size={20} className="text-slate-400"/> Visualização de Impressão
           </h2>
           <span className="text-xs text-slate-400 font-mono mt-1 flex items-center gap-2">
-            <span className="bg-slate-800 px-2 py-0.5 rounded border border-slate-700">ID: {report.reportId}</span>
+            <span className="bg-slate-800 px-2 py-0.5 rounded border border-slate-700">ID: {report.reportId || report.id}</span>
             <span>•</span>
             <span>{items.length} Itens</span>
           </span>

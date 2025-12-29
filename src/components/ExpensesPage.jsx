@@ -4,7 +4,7 @@ import {
   Paperclip, Pencil, Upload, FilePenLine,
   AlertTriangle, RefreshCw, Scale, DollarSign, Tag, Calendar
 } from 'lucide-react';
-import { formatToBRL } from '../utils/helpers';
+import { formatToBRL, getHexFromTailwind } from '../utils/helpers';
 
 const ExpensesPage = ({ 
   activeTab, 
@@ -26,7 +26,7 @@ const ExpensesPage = ({
 
   // --- ESTILO DINÂMICO ---
   const companyColor = currentCompany?.color || 'text-indigo-600';
-  const borderColorClass = companyColor.replace('text-', 'border-');
+  const borderColorClass = companyColor.includes('text-') ? companyColor.replace('text-', 'border-') : 'border-indigo-600';
 
   // Reset de seleção ao trocar de aba
   React.useEffect(() => {
@@ -90,7 +90,10 @@ const ExpensesPage = ({
     <div className="flex flex-col h-full overflow-hidden bg-slate-50">
       
       {/* --- HEADER DARK PREMIUM --- */}
-      <div className={`min-h-20 px-8 py-4 flex flex-col xl:flex-row justify-between xl:items-center gap-4 shrink-0 bg-slate-900 border-b-2 ${borderColorClass} shadow-md z-20`}>
+      <div 
+        className="min-h-20 px-8 py-4 flex flex-col lg:flex-row justify-between lg:items-center gap-4 shrink-0 bg-slate-900 border-b-2 shadow-md z-20"
+        style={{ borderBottomColor: getHexFromTailwind(companyColor) }}
+      >
         
         {/* TÍTULO */}
         <div>

@@ -8,7 +8,7 @@ const ManagementPage = ({
   const [activeTab, setActiveTab] = useState('companies');
 
   const companyColor = currentCompany?.color || 'text-indigo-600';
-  const borderColorClass = companyColor.replace('text-', 'border-');
+  const borderColorClass = companyColor.includes('text-') ? companyColor.replace('text-', 'border-') : 'border-indigo-600';
 
   const tabs = [
     { id: 'companies', label: 'Empresas', icon: Building },
@@ -50,7 +50,10 @@ const ManagementPage = ({
     <div className="flex flex-col h-full overflow-hidden">
       
       {/* HEADER DARK */}
-      <div className={`px-8 py-6 shrink-0 bg-slate-900 border-b-2 ${borderColorClass} shadow-md z-20`}>
+      <div 
+        className="px-8 py-6 shrink-0 bg-slate-900 border-b-2 shadow-md z-20"
+        style={{ borderBottomColor: getHexFromTailwind(companyColor) }}
+      >
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
             <div>
                 <h2 className="text-2xl font-bold text-white tracking-tight flex items-center gap-3">

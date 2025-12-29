@@ -3,7 +3,7 @@ import {
   FileText, Calendar, Search, Send, 
   RotateCcw, Pencil, Filter, Package, Eye 
 } from 'lucide-react';
-import { formatToBRL } from '../utils/helpers';
+import { formatToBRL, getHexFromTailwind } from '../utils/helpers';
 
 const GeneratedReportsPage = ({ 
   expenses, 
@@ -22,7 +22,7 @@ const GeneratedReportsPage = ({
   
   // --- ESTILO DARK DA EMPRESA ---
   const companyColor = currentCompany?.color || 'text-indigo-600';
-  const borderColorClass = companyColor.replace('text-', 'border-');
+  const borderColorClass = companyColor.includes('text-') ? companyColor.replace('text-', 'border-') : 'border-indigo-600';
 
   const months = [
       { v: '0', l: 'Janeiro' }, { v: '1', l: 'Fevereiro' }, { v: '2', l: 'Março' }, 
@@ -67,24 +67,25 @@ const GeneratedReportsPage = ({
             : new Date();
 
         return {
-            id: first.reportId,
+            reportId: first.reportId, // Padronizado para reportId
             ownerId: first.userId,
             costCenter: first.costCenter,
             itemsCount: items.length,
             totalValue: total,
             date: dateObj,
-            sampleItem: first // Para pegar dados extras se precisar
+            closingDate: first.closingDate, // Adicionado para consistência
+            sampleItem: first 
         };
     });
 
     // 4. Filtra por busca
     const filtered = list.filter(r => 
-        r.id.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        r.reportId.toLowerCase().includes(searchTerm.toLowerCase()) || 
         r.costCenter.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     // 5. Ordenação: ID DECRESCENTE
-    return filtered.sort((a, b) => b.id.localeCompare(a.id, undefined, { numeric: true }));
+    return filtered.sort((a, b) => b.reportId.localeCompare(a.reportId, undefined, { numeric: true }));
 
   }, [expenses, selectedMonth, selectedYear, searchTerm]);
 
@@ -95,7 +96,10 @@ const GeneratedReportsPage = ({
     <div className="flex flex-col h-full bg-slate-50 overflow-hidden">
       
       {/* --- HEADER DARK PREMIUM --- */}
-      <div className={`min-h-20 px-8 py-4 flex flex-col lg:flex-row justify-between lg:items-center gap-4 shrink-0 bg-slate-900 border-b-2 ${borderColorClass} shadow-md z-20`}>
+      <div 
+        className="min-h-20 px-8 py-4 flex flex-col lg:flex-row justify-between lg:items-center gap-4 shrink-0 bg-slate-900 border-b-2 shadow-md z-20"
+        style={{ borderBottomColor: getHexFromTailwind(companyColor) }}
+      >
         
         {/* TÍTULO */}
         <div>
@@ -172,13 +176,13 @@ const GeneratedReportsPage = ({
                 </thead>
                 <tbody className="bg-white divide-y divide-slate-100 text-xs text-slate-600">
                     {reportsList.map((report) => (
-                        <tr key={report.id} className="hover:bg-slate-50 transition-colors group">
+                        <tr key={report.reportId} className="hover:bg-slate-50 transition-colors group">
                             
                             {/* ID */}
                             <td className="p-4 pl-8">
                                 <div className={`font-mono font-bold flex items-center gap-2 ${companyColor} text-sm`}>
                                     <FileText size={16}/> 
-                                    {report.id}
+                                    {report.reportId}
                                 </div>
                             </td>
 
@@ -218,7 +222,7 @@ const GeneratedReportsPage = ({
 
                                     {/* EDITAR ID */}
                                     <button 
-                                        onClick={() => onEditId(report.id)} 
+                                        onClick={() => onEditId(report.reportId)} 
                                         className="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 border border-transparent hover:border-blue-100 transition-all"
                                         title="Editar ID"
                                     >
@@ -227,7 +231,7 @@ const GeneratedReportsPage = ({
 
                                     {/* REABRIR (DESFAZER) */}
                                     <button 
-                                        onClick={() => onReopen(report.id, report.ownerId)} 
+                                        onClick={() => onReopen(report.reportId, report.ownerId)} 
                                         className="p-1.5 rounded-lg text-slate-400 hover:text-amber-600 hover:bg-amber-50 border border-transparent hover:border-amber-100 transition-all"
                                         title="Reabrir (Voltar para Lançamentos)"
                                     >
@@ -236,7 +240,7 @@ const GeneratedReportsPage = ({
 
                                     {/* ENVIAR (SUBMIT) */}
                                     <button 
-                                        onClick={() => onLaunch(report.id, report.ownerId)} 
+                                        onClick={() => onLaunch(report.reportId, report.ownerId)} 
                                         className={`p-1.5 rounded-lg text-white shadow-md transition-all flex items-center gap-2 px-3 ml-2 ${companyColor.replace('text-', 'bg-').replace('600', '600')} hover:opacity-90`}
                                         title="Enviar Relatório"
                                     >
